@@ -32,6 +32,7 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin;
 public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   private Context applicationContext;
   private MethodChannel methodChannel;
+  private bool enabled = true;
 
   static HashMap<String, Object> appendToContextMiddleware;
 
@@ -63,6 +64,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
 
       // Do not execute if there is no write key
       if (writeKey == null) {
+        this.enabled = false;
         return;
       }
 
@@ -123,7 +125,9 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
 
   @Override
   public void onMethodCall(MethodCall call, Result result) {
-    if(call.method.equals("identify")) {
+    if (!enabled) {
+      result.success(true);
+    } else if (call.method.equals("identify")) {
       this.identify(call, result);
     } else if (call.method.equals("track")) {
       this.track(call, result);
