@@ -127,9 +127,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   public void onMethodCall(MethodCall call, Result result) {
     if (!enabled) {
       result.success(true);
-    }
-
-    if(call.method.equals("identify")) {
+    } else if(call.method.equals("identify")) {
       this.identify(call, result);
     } else if (call.method.equals("track")) {
       this.track(call, result);
