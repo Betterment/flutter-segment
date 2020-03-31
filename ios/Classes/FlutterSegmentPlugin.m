@@ -6,6 +6,7 @@
 @implementation FlutterSegmentPlugin
 // Contents to be appended to the context
 static NSDictionary *_appendToContextMiddleware;
+static BOOL isEnabled = true;
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
   @try {
@@ -22,7 +23,8 @@ static NSDictionary *_appendToContextMiddleware;
 
     // Do not execute if there is no write key
     if (writeKey == nil) {
-        return;
+      isEnabled = false;
+      return;
     }
 
     SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:writeKey];
@@ -120,7 +122,9 @@ static NSDictionary *_appendToContextMiddleware;
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-  if ([@"identify" isEqualToString:call.method]) {
+  if (!isEnabled) {
+    return;
+  } else if ([@"identify" isEqualToString:call.method]) {
     [self identify:call result:result];
   } else if ([@"track" isEqualToString:call.method]) {
     [self track:call result:result];
