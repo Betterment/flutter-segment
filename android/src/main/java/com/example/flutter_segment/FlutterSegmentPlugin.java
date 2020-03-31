@@ -32,7 +32,7 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin;
 public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   private Context applicationContext;
   private MethodChannel methodChannel;
-  private bool enabled = true;
+  private boolean enabled = true;
 
   static HashMap<String, Object> appendToContextMiddleware;
 
